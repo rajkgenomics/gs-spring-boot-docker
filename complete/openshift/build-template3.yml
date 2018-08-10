@@ -1,0 +1,92 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: hellodocker-openshift
+parameters:
+- name: GIT_URI
+  displayName: Git repository URI
+  description: location of the hello git repo
+  value: https://github.com/rajkgenomics/gs-spring-boot-docker
+- description: Github trigger secret.  A difficult to guess string encoded as part
+    of the webhook URL.  Not encrypted.
+  displayName: GitHub Webhook Secret
+  from: '[a-zA-Z0-9]{40}'
+  generate: expression
+  name: WEBHOOK_SECRET
+objects:
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    name: hellodocker 
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: hellodocker:latest
+    postCommit: {}
+    resources: {}
+    runPolicy: Serial
+    source:
+      git:
+        uri: ${GIT_URI}
+      type: Git
+    strategy:
+      dockerStrategy:
+        dockerfilePath: complete/Dockerfile
+       #from:
+       #  kind: ImageStreamTag
+       #  name: centos:7
+      type: Docker
+    triggers:
+    - github:
+        secret: ${WEBHOOK_SECRET}
+      type: GitHub
+    - generic:
+        secret: ${WEBHOOK_SECRET}
+      type: Generic
+    - imageChange: {}
+      type: ImageChange
+    - type: ConfigChange
+  status:
+    lastVersion: 0
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    name: openjdkalpine
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - annotations:
+        openshift.io/imported-from: openjdk:8-jdk-alpine
+      from:
+        kind: DockerImage
+        name: docker.io/openjdk:8-jdk-alpine
+      importPolicy:
+        scheduled: true
+      name: "8"
+      referencePolicy:
+        type: Source
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    name: centos
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - annotations:
+        openshift.io/imported-from: centos:7
+      from:
+        kind: DockerImage
+        name: docker.io/centos:7
+      importPolicy:
+        scheduled: true
+      name: "7"
+      referencePolicy:
+        type: Source
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    name: hellodocker
+

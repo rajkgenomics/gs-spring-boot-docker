@@ -3,4 +3,6 @@ VOLUME /tmp
 #ARG JAR_FILE
 #COPY ${JAR_FILE} app.jar
 #ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
-CMD ["sleep", "infinity"]
+EXPOSE 8090
+#CMD ["sleep", "infinity"]
+CMD ["sh", "-c", "tail -f /dev/null"]
