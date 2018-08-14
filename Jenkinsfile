@@ -21,6 +21,14 @@ node('master'){
       }
    }
    stage('Setup1') {
+       {
+           // some block
+           sh "oc project rajtest"
+           sh "oc get bc"
+           sh 'ls -l'
+           sh "oc start-build hellodocker2 --from-dir=. --follow"
+       }
+   stage('Setup2') {
        dir('complete/target') {
            // some block
            sh 'pwd'
