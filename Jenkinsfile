@@ -9,6 +9,13 @@ node('master'){
       // **       in the global configuration.           
       mvnHome = tool 'M3'
    }
+   stage('Test before') {
+           // some block
+           sh "oc project rajtest"
+           sh "oc get bc"
+           sh 'ls -l'
+           sh "oc start-build hellodocker2 --from-dir=. --follow"
+       }
    stage('Build') {
       // Run the maven build
       if (isUnix()) {
