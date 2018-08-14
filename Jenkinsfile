@@ -21,7 +21,6 @@ node('master'){
       }
    }
    stage('Setup1') {
-       {
            // some block
            sh "oc project rajtest"
            sh "oc get bc"
