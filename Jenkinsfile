@@ -47,7 +47,8 @@ openshift.withCluster( 'OpenshiftNonProdLoggingInAsAdmin' ) {
         echo "Now inside the openshift project: ${openshift.project()}"
         sh 'pwd'
         sh 'ls -l'
-        openshift.selector("bc","hellodocker2").startBuild("--from-dir=complete","--follow")
+        sh 'set'
+        openshift.selector("bc","hellodocker2").startBuild("--from-dir=${PWD}","--follow")
     }
 }
        }
