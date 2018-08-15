@@ -48,7 +48,7 @@ openshift.withCluster( 'OpenshiftNonProdLoggingInAsAdmin' ) {
         sh 'pwd'
         sh 'ls -l'
         sh 'set'
-        openshift.selector("bc","hellodocker2").startBuild("--from-dir=${PWD}","--follow")
+        openshift.selector("bc","hellodocker2").startBuild("--from-dir=/var/lib/jenkins/jobs/testing123/workspace","--follow")
     }
 }
        }
