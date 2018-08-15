@@ -43,13 +43,13 @@ node('master'){
 /** The logical name references a Jenkins cluster configuration which implies **/
 /** API Server URL, default credentials, and a default project to use within the closure body. **/
 openshift.withCluster( 'OpenshiftNonProdLoggingInAsAdmin' ) {
-    echo "Hello from ${openshift.cluster()}'s default project: ${openshift.project()}"
+    openshift.withProject( 'rajtest' ) {
+        echo "Now inside the openshift project: ${openshift.project()}"
+        sh 'pwd'
+        sh 'ls -l'
+        openshift.selector("bc","hellodocker2").startBuild("--from-dir=.","--follow")
+    }
 }
-           // some block
-           sh "oc project rajtest"
-           sh "oc get bc"
-           sh 'ls -l'
-           sh "oc start-build hellodocker2 --from-dir=. --follow"
        }
    stage('Build') {
       // Run the maven build
