@@ -40,6 +40,11 @@ node('master'){
     }
 
     stage('Test before') {
+/** The logical name references a Jenkins cluster configuration which implies **/
+/** API Server URL, default credentials, and a default project to use within the closure body. **/
+openshift.withCluster( 'OpenshiftNonProdLoggingInAsAdmin' ) {
+    echo "Hello from ${openshift.cluster()}'s default project: ${openshift.project()}"
+}
            // some block
            sh "oc project rajtest"
            sh "oc get bc"
