@@ -89,21 +89,26 @@ node('master'){
           }
       }
     }
-    stage('Test before') {
-script {
-/** The logical name references a Jenkins cluster configuration which implies **/
-/** API Server URL, default credentials, and a default project to use within the closure body. **/
- openshift.withCluster( 'OpenshiftNonProdLoggingInAsAdmin' ) {
-    openshift.withProject( 'rajtest' ) {
-        echo "Now inside the openshift project: ${openshift.project()}"
-        sh 'pwd'
-        sh 'ls -l'
-        sh 'set'
-        openshift.selector("bc","hellodocker2").startBuild("--from-dir=/var/lib/jenkins/jobs/testing123/workspace","--follow")
+    stage('BuildImage') {
+      script {
+          /** The logical name references a Jenkins cluster configuration which implies **/
+          /** API Server URL, default credentials, and a default project to use within the closure body. **/
+          openshift.withCluster( 'OpenshiftNonProdLoggingInAsAdmin' ) {
+                openshift.withProject( 'rajtest' ) {
+                      echo "Now inside the openshift project: ${openshift.project()}"
+                      openshift.selector("bc","hellodocker2").startBuild("--from-dir=/var/lib/jenkins/jobs/testing123/workspace","--wait","--follow")
+
+                      openshift.selector("dc","hellodocker2").deploy()
+     def latestDeploymentVersion = openshift.selector('dc',"hellodocker2").object().status.latestVersion
+      def rc = openshift.selector('rc', "hellodocker2-${latestDeploymentVersion}")
+      rc.untilEach(1){
+          def rcMap = it.object()
+          return (rcMap.status.replicas.equals(rcMap.status.readyReplicas))
+      }
+                }
+          }
+      }
     }
- }
-}
-       }
    stage('Build') {
       // Run the maven build
       if (isUnix()) {
