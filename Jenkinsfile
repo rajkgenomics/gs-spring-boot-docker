@@ -53,7 +53,7 @@ script {
 
       // One straightforward way is to pass string arguments directly to `oc process`.
       // This includes any parameter values you want to specify.
-      def models = openshift.process( " -f openshift/deploy-template4.yml")
+      def models = openshift.process( "-f complete/openshift/deploy-template4.yml")
 
       // A list of Groovy object models that were defined in the template will be returned.
       echo "Creating this template will instantiate ${models.size()} objects"
