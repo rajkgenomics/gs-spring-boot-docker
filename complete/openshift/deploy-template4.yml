@@ -1,0 +1,95 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: hellodocker2-openshift
+parameters:
+- name: DATA_DIR
+  displayName: Data directory
+  description: Path to data directory
+  required: true
+  value: /tmp
+objects:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: hellodocker2
+  spec:
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      deploymentconfig: hellodocker2
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: v1
+  kind: Route
+  metadata:
+    name: hellodocker2
+  spec:
+    port:
+      targetPort: 8080-tcp
+    to:
+      kind: Service
+      name: hellodocker2
+      weight: 100
+    wildcardPolicy: None
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    name: hellodocker2
+  spec:
+    replicas: 1
+    selector:
+      deploymentconfig: hellodocker2
+    strategy:
+      activeDeadlineSeconds: 21600
+      recreateParams:
+        timeoutSeconds: 600
+      resources: {}
+      type: Recreate
+    template:
+      metadata:
+        labels:
+          deploymentconfig: hellodocker2
+      spec:
+        containers:
+        - env:
+          - name: GF_INSTALL_PLUGINS
+            value: hawkular-datasource
+          - name: DATAD
+            value: ${DATA_DIR}
+          - name: PLGND
+            value: ${DATA_DIR}/plugins
+          image: ''
+          imagePullPolicy: Always
+          name: hellodocker2
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: ${DATA_DIR}
+            name: data
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: data
+    test: false
+    triggers:
+    - imageChangeParams:
+        automatic: false
+        containerNames:
+        - hellodocker2
+        from:
+          kind: ImageStreamTag
+          name: hellodocker2:latest
+      type: ImageChange
+    - type: ConfigChange
+
