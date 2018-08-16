@@ -53,7 +53,7 @@ script {
 
       // You can pass this list of object models directly to the create API
       def created = openshift.apply( models )
-      echo "The template instantiated: ${models.names()}"
+      echo "Template Created: ${created.names()}"
     }
  }
 }
