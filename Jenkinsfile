@@ -38,26 +38,57 @@ node('master'){
     stage ('Publish build info') {
         server.publishBuildInfo buildInfo
     }
-stage('Templates') {
-script {
-/** The logical name references a Jenkins cluster configuration which implies **/
-/** API Server URL, default credentials, and a default project to use within the closure body. **/
- openshift.withCluster( 'OpenshiftNonProdLoggingInAsAdmin' ) {
-    openshift.withProject( 'rajtest' ) {
-        echo "Now inside the openshift project: ${openshift.project()}"
-
-      def models = openshift.process("--filename=/var/lib/jenkins/jobs/testing123/workspace/complete/openshift/deploy-template4.yml")
-
-      // A list of Groovy object models that were defined in the template will be returned.
-      echo "Creating this template will instantiate ${models.size()} objects"
-
-      // You can pass this list of object models directly to the create API
-      def created = openshift.apply( models )
-      echo "Template Created: ${created.names()}"
-    }
- }
-}
+    stage('Delete') {
+      script {
+          /** The logical name references a Jenkins cluster configuration which implies **/
+          /** API Server URL, default credentials, and a default project to use within the closure body. **/
+          openshift.withCluster( 'OpenshiftNonProdLoggingInAsAdmin' ) {
+                openshift.withProject( 'rajtest' ) {
+                      echo "Now inside the openshift project: ${openshift.project()}"
+ 
+                      if (openshift.selector('dc','hellodocker2').exists()) {
+                         echo "Now Deleting DC, SVC, and Route objects..."
+                         openshift.selector('dc','hellodocker2').delete()
+                         openshift.selector('svc','hellodocker2').delete()
+                         openshift.selector('route','hellodocker2').delete()
+                      }
+                      if (openshift.selector('bc','hellodocker2').exists()) {
+                         echo "Now Deleting BC object..."
+                         openshift.selector('bc','hellodocker2').delete()
+                      }
+                }
+          }
       }
+    }
+    stage('CreateTemplates') {
+      script {
+          /** The logical name references a Jenkins cluster configuration which implies **/
+          /** API Server URL, default credentials, and a default project to use within the closure body. **/
+          openshift.withCluster( 'OpenshiftNonProdLoggingInAsAdmin' ) {
+                openshift.withProject( 'rajtest' ) {
+                      echo "Now inside the openshift project: ${openshift.project()}"
+
+                      def models = openshift.process("--filename=/var/lib/jenkins/jobs/testing123/workspace/complete/openshift/deploy-template4.yml")
+
+                      // A list of Groovy object models that were defined in the template will be returned.
+                      echo "Creating this template will instantiate ${models.size()} objects"
+
+                      // You can pass this list of object models directly to the create API
+                      def created = openshift.apply( models )
+                      echo "Template Created: ${created.names()}"
+
+                      def models = openshift.process("--filename=/var/lib/jenkins/jobs/testing123/workspace/complete/openshift/build-template4.yml")
+
+                      // A list of Groovy object models that were defined in the template will be returned.
+                      echo "Creating this template will instantiate ${models.size()} objects"
+
+                      // You can pass this list of object models directly to the create API
+                      def created = openshift.apply( models )
+                      echo "Template Created: ${created.names()}"
+                }
+          }
+      }
+    }
     stage('Test before') {
 script {
 /** The logical name references a Jenkins cluster configuration which implies **/
