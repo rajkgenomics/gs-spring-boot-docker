@@ -62,7 +62,7 @@ script {
     openshift.withProject( 'rajtest' ) {
         echo "Now inside the openshift project: ${openshift.project()}"
       
-      def models = openshift.process( "-f complete/openshift/deploy-template4.yml")
+      def models = openshift.process( "-f /var/lib/jenkins/jobs/testing123/workspace/complete/openshift/deploy-template4.yml")
 
       // A list of Groovy object models that were defined in the template will be returned.
       echo "Creating this template will instantiate ${models.size()} objects"
