@@ -50,9 +50,18 @@ script {
         sh 'ls -l'
         sh 'set'
         openshift.selector("bc","hellodocker2").startBuild("--from-dir=/var/lib/jenkins/jobs/testing123/workspace","--follow")
-
-      // One straightforward way is to pass string arguments directly to `oc process`.
-      // This includes any parameter values you want to specify.
+    }
+ }
+}
+       }
+stage('Templates') {
+script {
+/** The logical name references a Jenkins cluster configuration which implies **/
+/** API Server URL, default credentials, and a default project to use within the closure body. **/
+ openshift.withCluster( 'OpenshiftNonProdLoggingInAsAdmin' ) {
+    openshift.withProject( 'rajtest' ) {
+        echo "Now inside the openshift project: ${openshift.project()}"
+      
       def models = openshift.process( "-f complete/openshift/deploy-template4.yml")
 
       // A list of Groovy object models that were defined in the template will be returned.
