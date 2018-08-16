@@ -77,14 +77,14 @@ node('master'){
                       def created = openshift.apply( models )
                       echo "Template Created: ${created.names()}"
 
-                      def models = openshift.process("--filename=/var/lib/jenkins/jobs/testing123/workspace/complete/openshift/build-template4.yml")
+                      def models2 = openshift.process("--filename=/var/lib/jenkins/jobs/testing123/workspace/complete/openshift/build-template4.yml")
 
                       // A list of Groovy object models that were defined in the template will be returned.
                       echo "Creating this template will instantiate ${models.size()} objects"
 
                       // You can pass this list of object models directly to the create API
-                      def created = openshift.apply( models )
-                      echo "Template Created: ${created.names()}"
+                      def created2 = openshift.apply( models2 )
+                      echo "Template Created: ${created2.names()}"
                 }
           }
       }
