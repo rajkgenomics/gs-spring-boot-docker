@@ -38,7 +38,25 @@ node('master'){
     stage ('Publish build info') {
         server.publishBuildInfo buildInfo
     }
+stage('Templates') {
+script {
+/** The logical name references a Jenkins cluster configuration which implies **/
+/** API Server URL, default credentials, and a default project to use within the closure body. **/
+ openshift.withCluster( 'OpenshiftNonProdLoggingInAsAdmin' ) {
+    openshift.withProject( 'rajtest' ) {
+        echo "Now inside the openshift project: ${openshift.project()}"
 
+      def models = openshift.process( "-f /var/lib/jenkins/jobs/testing123/workspace/complete/openshift/deploy-template4.yml")
+
+      // A list of Groovy object models that were defined in the template will be returned.
+      echo "Creating this template will instantiate ${models.size()} objects"
+
+      // You can pass this list of object models directly to the create API
+      def created = openshift.create( models )
+      echo "The template instantiated: ${models.names()}"
+    }
+ }
+}
     stage('Test before') {
 script {
 /** The logical name references a Jenkins cluster configuration which implies **/
@@ -50,26 +68,6 @@ script {
         sh 'ls -l'
         sh 'set'
         openshift.selector("bc","hellodocker2").startBuild("--from-dir=/var/lib/jenkins/jobs/testing123/workspace","--follow")
-    }
- }
-}
-       }
-stage('Templates') {
-script {
-/** The logical name references a Jenkins cluster configuration which implies **/
-/** API Server URL, default credentials, and a default project to use within the closure body. **/
- openshift.withCluster( 'OpenshiftNonProdLoggingInAsAdmin' ) {
-    openshift.withProject( 'rajtest' ) {
-        echo "Now inside the openshift project: ${openshift.project()}"
-      
-      def models = openshift.process( "-f /var/lib/jenkins/jobs/testing123/workspace/complete/openshift/deploy-template4.yml")
-
-      // A list of Groovy object models that were defined in the template will be returned.
-      echo "Creating this template will instantiate ${models.size()} objects"
-
-      // You can pass this list of object models directly to the create API
-      def created = openshift.create( models )
-      echo "The template instantiated: ${models.names()}"
     }
  }
 }
