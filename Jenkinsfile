@@ -150,10 +150,12 @@ node('master'){
       script {
           echo "Run some smoke tests here on the Pod you just deployed...Test all ok..."
           echo "Tests to be decided and added....."
+     }
     }
     stage('Promote-And-Tag') {
       script {
           echo "We can either promote within the Openshift Docker registry or the Artifactory"
           echo "Use the artifactory plugin to do this....TODO"
+     }
     }
 }
