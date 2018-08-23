@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Template
 metadata:
-  name: helloartifact-openshift
+  name: hellodocker2-openshift
 parameters:
 - name: GIT_URI
   displayName: Git repository URI
@@ -17,14 +17,14 @@ objects:
 - apiVersion: v1
   kind: BuildConfig
   metadata:
-    name: helloartifact 
+    name: hellodocker2 
   spec:
     output:
       pushSecret:
         name: rajartifactory
       to:
         kind: DockerImage
-        name: cs-prod-tools-artifactory-01-ngis.gel.zone:5001/genomicsengland/helloartifact:latest
+        name: cs-prod-tools-artifactory-01-ngis.gel.zone:5001/genomicsengland/hellodocker2:latest
     postCommit: {}
     resources: {}
     runPolicy: Serial

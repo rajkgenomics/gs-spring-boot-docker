@@ -42,7 +42,8 @@ node('master'){
       script {
           /** The logical name references a Jenkins cluster configuration which implies **/
           /** API Server URL, default credentials, and a default project to use within the closure body. **/
-          openshift.withCluster( 'OpenshiftNonProdLoggingInAsAdmin' ) {
+          openshift.withCluster( 'OpenshiftProdLoggingInAsAdmin' ) {
+                echo "NOTE : A Pre-Requisite for this pipeline is that project rajtest exists and has been created"
                 openshift.withProject( 'rajtest' ) {
                       echo "Now inside the openshift project: ${openshift.project()}"
  
@@ -64,11 +65,12 @@ node('master'){
       script {
           /** The logical name references a Jenkins cluster configuration which implies **/
           /** API Server URL, default credentials, and a default project to use within the closure body. **/
-          openshift.withCluster( 'OpenshiftNonProdLoggingInAsAdmin' ) {
+          openshift.withCluster( 'OpenshiftProdLoggingInAsAdmin' ) {
+                echo "NOTE : A Pre-Requisite for this pipeline is that project rajtest exists and has been created"
                 openshift.withProject( 'rajtest' ) {
                       echo "Now inside the openshift project: ${openshift.project()}"
 
-                      def models = openshift.process("--filename=/var/lib/jenkins/jobs/testing123/workspace/complete/openshift/deploy-template4.yml")
+                      def models = openshift.process("--filename=/var/lib/jenkins/jobs/testing123/workspace/complete/openshift/deploy-template5.yml")
 
                       // A list of Groovy object models that were defined in the template will be returned.
                       echo "Creating this template will instantiate ${models.size()} objects"
@@ -77,7 +79,7 @@ node('master'){
                       def created = openshift.apply( models )
                       echo "Template Created: ${created.names()}"
 
-                      def models2 = openshift.process("--filename=/var/lib/jenkins/jobs/testing123/workspace/complete/openshift/build-template4.yml")
+                      def models2 = openshift.process("--filename=/var/lib/jenkins/jobs/testing123/workspace/complete/openshift/build-template5.yml")
 
                       // A list of Groovy object models that were defined in the template will be returned.
                       echo "Creating this template will instantiate ${models.size()} objects"
@@ -89,11 +91,11 @@ node('master'){
           }
       }
     }
-    stage('BuildImage') {
+    stage('BuildImageToArtifactory') {
       script {
           /** The logical name references a Jenkins cluster configuration which implies **/
           /** API Server URL, default credentials, and a default project to use within the closure body. **/
-          openshift.withCluster( 'OpenshiftNonProdLoggingInAsAdmin' ) {
+          openshift.withCluster( 'OpenshiftProdLoggingInAsAdmin' ) {
                 openshift.withProject( 'rajtest' ) {
                       echo "Now inside the openshift project: ${openshift.project()}"
                       openshift.selector("bc","hellodocker2").startBuild("--from-dir=/var/lib/jenkins/jobs/testing123/workspace","--wait","--follow")
@@ -101,11 +103,32 @@ node('master'){
           }
       }
     }
-    stage('DeployImage') {
+    stage('PullFromArtifactory') {
       script {
           /** The logical name references a Jenkins cluster configuration which implies **/
           /** API Server URL, default credentials, and a default project to use within the closure body. **/
-          openshift.withCluster( 'OpenshiftNonProdLoggingInAsAdmin' ) {
+          openshift.withCluster( 'OpenshiftProdLoggingInAsAdmin' ) {
+                echo "NOTE : A Pre-Requisite for this pipeline is that project rajtest exists and has been created"
+                openshift.withProject( 'rajtest' ) {
+                      echo "Now inside the openshift project: ${openshift.project()}"
+
+                      def models3 = openshift.process("--filename=/var/lib/jenkins/jobs/testing123/workspace/complete/openshift/pull-template5.yml")
+
+                      // A list of Groovy object models that were defined in the template will be returned.
+                      echo "Creating this template will instantiate ${models.size()} objects"
+
+                      // You can pass this list of object models directly to the create API
+                      def created3 = openshift.apply( models3 )
+                      echo "Template Created: ${created3.names()}"
+                }
+          }
+      }
+    }
+    stage('DeployImageInOpenshift') {
+      script {
+          /** The logical name references a Jenkins cluster configuration which implies **/
+          /** API Server URL, default credentials, and a default project to use within the closure body. **/
+          openshift.withCluster( 'OpenshiftProdLoggingInAsAdmin' ) {
                 openshift.withProject( 'rajtest' ) {
                       echo "Now inside the openshift project: ${openshift.project()}"
 
@@ -130,6 +153,7 @@ node('master'){
     }
     stage('Promote-And-Tag') {
       script {
-          echo "We can either promote to the Openshift Docker registry or the Artifactory"
+          echo "We can either promote within the Openshift Docker registry or the Artifactory"
+          echo "Use the artifactory plugin to do this....TODO"
     }
 }

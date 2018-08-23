@@ -11,16 +11,16 @@ objects:
 - apiVersion: v1
   kind: ImageStream
   metadata:
-    name: helloartifact
+    name: hellodocker2
   spec:
     lookupPolicy:
       local: false
     tags:
     - annotations:
-        openshift.io/imported-from: helloartifact:latest
+        openshift.io/imported-from: hellodocker2:latest
       from:
         kind: DockerImage
-        name: cs-prod-tools-artifactory-01-ngis.gel.zone:5001/genomicsengland/helloartifact:latest
+        name: cs-prod-tools-artifactory-01-ngis.gel.zone:5001/genomicsengland/hellodocker2:latest
       importPolicy:
         scheduled: true
       name: "latest"
