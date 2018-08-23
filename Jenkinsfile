@@ -42,7 +42,7 @@ node('master'){
       script {
           /** The logical name references a Jenkins cluster configuration which implies **/
           /** API Server URL, default credentials, and a default project to use within the closure body. **/
-          openshift.withCluster( 'OpenshiftProdLoggingInAsAdmin' ) {
+          openshift.withCluster( 'OpenshiftNonProdLoggingInAsAdmin' ) {
                 openshift.withProject( 'rajtest' ) {
                       echo "Now inside the openshift project: ${openshift.project()}"
  
@@ -64,7 +64,7 @@ node('master'){
       script {
           /** The logical name references a Jenkins cluster configuration which implies **/
           /** API Server URL, default credentials, and a default project to use within the closure body. **/
-          openshift.withCluster( 'OpenshiftProdLoggingInAsAdmin' ) {
+          openshift.withCluster( 'OpenshiftNonProdLoggingInAsAdmin' ) {
                 openshift.withProject( 'rajtest' ) {
                       echo "Now inside the openshift project: ${openshift.project()}"
 
@@ -93,7 +93,7 @@ node('master'){
       script {
           /** The logical name references a Jenkins cluster configuration which implies **/
           /** API Server URL, default credentials, and a default project to use within the closure body. **/
-          openshift.withCluster( 'OpenshiftProdLoggingInAsAdmin' ) {
+          openshift.withCluster( 'OpenshiftNonProdLoggingInAsAdmin' ) {
                 openshift.withProject( 'rajtest' ) {
                       echo "Now inside the openshift project: ${openshift.project()}"
                       openshift.selector("bc","hellodocker2").startBuild("--from-dir=/var/lib/jenkins/jobs/testing123/workspace","--wait","--follow")
@@ -105,7 +105,7 @@ node('master'){
       script {
           /** The logical name references a Jenkins cluster configuration which implies **/
           /** API Server URL, default credentials, and a default project to use within the closure body. **/
-          openshift.withCluster( 'OpenshiftProdLoggingInAsAdmin' ) {
+          openshift.withCluster( 'OpenshiftNonProdLoggingInAsAdmin' ) {
                 openshift.withProject( 'rajtest' ) {
                       echo "Now inside the openshift project: ${openshift.project()}"
 
