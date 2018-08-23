@@ -115,7 +115,7 @@ node('master'){
                       def models3 = openshift.process("--filename=/var/lib/jenkins/jobs/testing123/workspace/complete/openshift/pull-template5.yml")
 
                       // A list of Groovy object models that were defined in the template will be returned.
-                      echo "Creating this template will instantiate ${models.size()} objects"
+                      echo "Creating this template will instantiate ${models3.size()} objects"
 
                       // You can pass this list of object models directly to the create API
                       def created3 = openshift.apply( models3 )
