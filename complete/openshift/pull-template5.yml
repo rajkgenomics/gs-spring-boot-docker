@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: hellodocker2-openshift
+parameters:
+- name: PLACEHOLDER1
+  displayName: placeholder1
+  description: use this at your desire
+  value: yourvaluehere
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    name: helloartifact
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - annotations:
+        openshift.io/imported-from: helloartifact:latest
+      from:
+        kind: DockerImage
+        name: cs-prod-tools-artifactory-01-ngis.gel.zone:5001/genomicsengland/helloartifact:latest
+      importPolicy:
+        scheduled: true
+      name: "latest"
+      referencePolicy:
+        type: Source
+

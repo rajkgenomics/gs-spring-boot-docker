@@ -1,0 +1,57 @@
+{
+    "kind": "BuildConfig",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "helloartifact",
+        "creationTimestamp": null
+    },
+    "spec": {
+        "triggers": [
+            {
+                "type": "GitHub",
+                "github": {
+                    "secret": "xYjl5ic2pdwWPnpE2gigvhT0K1Ra38HtVoWsTytC"
+                }
+            },
+            {
+                "type": "Generic",
+                "generic": {
+                    "secret": "xYjl5ic2pdwWPnpE2gigvhT0K1Ra38HtVoWsTytC"
+                }
+            },
+            {
+                "type": "ConfigChange"
+            }
+        ],
+        "runPolicy": "Serial",
+        "source": {
+            "type": "Git",
+            "git": {
+                "uri": "https://github.com/rajkgenomics/gs-spring-boot-docker"
+            }
+        },
+        "strategy": {
+            "type": "Docker",
+            "dockerStrategy": {
+                "dockerfilePath": "complete/Dockerfile"
+            }
+        },
+        "output": {
+            "to": {
+                "kind": "DockerImage",
+                "name": "cs-prod-tools-artifactory-01-ngis.gel.zone:5001/genomicsengland/helloartifact:latest"
+            },
+            "pushSecret": {
+                "name": "rajartifactory"
+            }
+        },
+        "resources": {},
+        "postCommit": {},
+        "nodeSelector": null,
+        "successfulBuildsHistoryLimit": 5,
+        "failedBuildsHistoryLimit": 5
+    },
+    "status": {
+        "lastVersion": 0
+    }
+}
