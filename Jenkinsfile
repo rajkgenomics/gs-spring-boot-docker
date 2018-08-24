@@ -134,7 +134,7 @@ node('master'){
                       echo "Now inside the openshift project: ${openshift.project()}"
 
                       echo "Now Trying to deploy...Will kick 1 off and then sleep a bit and then cancel it before trying again"
-                      echo "Have found I need to do this rollout twice in order for it to work. Will stick with this for the mo...""
+                      echo "Have found I need to do this rollout twice in order for it to work. Will stick with this for the mo..."
 
                       openshift.selector("dc","hellodocker2").rollout().latest()
                       sleep 10
