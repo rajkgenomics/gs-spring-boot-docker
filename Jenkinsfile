@@ -134,7 +134,8 @@ node('master'){
                       echo "Now inside the openshift project: ${openshift.project()}"
 
                       echo "Now Trying to deploy..."
-                      openshift.selector("dc","hellodocker2").rollout().latest()
+                      //openshift.selector("dc","hellodocker2").rollout().latest()
+                      openshift.selector("dc","hellodocker2").rollout()
 
                       /*
                       def latestDeploymentVersion = openshift.selector('dc',"hellodocker2").object().status.latestVersion
