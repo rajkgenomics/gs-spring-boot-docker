@@ -124,7 +124,7 @@ node('master'){
           }
       }
     }
-/*    stage('DeployImageInOpenshift') {
+    stage('DeployImageInOpenshift') {
 
       script {
           // The logical name references a Jenkins cluster configuration which implies 
@@ -136,17 +136,18 @@ node('master'){
                       echo "Now Trying to deploy..."
                       openshift.selector("dc","hellodocker2").rollout().latest()
 
+                      /*
                       def latestDeploymentVersion = openshift.selector('dc',"hellodocker2").object().status.latestVersion
                       echo "Checking the deployment deploy...${latestDeploymentVersion}"
                       def rc = openshift.selector('rc', "hellodocker2-${latestDeploymentVersion}")
                       rc.untilEach(1){
                       def rcMap = it.object()
                               return (rcMap.status.replicas.equals(rcMap.status.readyReplicas))
-                      }
+                      } */
                 }
           }
       } 
-    } */
+    } 
     stage('Testing') {
       script {
           echo "Run some smoke tests here on the Pod you just deployed...Test all ok..."
