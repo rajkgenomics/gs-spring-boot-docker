@@ -125,6 +125,7 @@ node('master'){
       }
     }
     stage('DeployImageInOpenshift') {
+/*
       script {
           /** The logical name references a Jenkins cluster configuration which implies **/
           /** API Server URL, default credentials, and a default project to use within the closure body. **/
@@ -144,7 +145,7 @@ node('master'){
                       }
                 }
           }
-      }
+      } */
     }
     stage('Testing') {
       script {
