@@ -133,9 +133,10 @@ node('master'){
                 openshift.withProject( 'rajtest' ) {
                       echo "Now inside the openshift project: ${openshift.project()}"
 
-                      echo "Now Trying to deploy..."
-                      //openshift.selector("dc","hellodocker2").rollout().latest()
-                      openshift.selector("dc","hellodocker2").rollout()
+                      echo "Now Trying to deploy...Will sleep 30 seconds beforehand to allow things to settle"
+
+                      sleep 30
+                      openshift.selector("dc","hellodocker2").rollout().latest()
 
                       /*
                       def latestDeploymentVersion = openshift.selector('dc',"hellodocker2").object().status.latestVersion
