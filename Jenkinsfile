@@ -124,11 +124,11 @@ node('master'){
           }
       }
     }
-    stage('DeployImageInOpenshift') {
-/*
+/*    stage('DeployImageInOpenshift') {
+
       script {
-          /** The logical name references a Jenkins cluster configuration which implies **/
-          /** API Server URL, default credentials, and a default project to use within the closure body. **/
+          // The logical name references a Jenkins cluster configuration which implies 
+          // API Server URL, default credentials, and a default project to use within the closure body. 
           openshift.withCluster( 'OpenshiftProdLoggingInAsAdmin' ) {
                 openshift.withProject( 'rajtest' ) {
                       echo "Now inside the openshift project: ${openshift.project()}"
@@ -145,8 +145,8 @@ node('master'){
                       }
                 }
           }
-      } */
-    }
+      } 
+    } */
     stage('Testing') {
       script {
           echo "Run some smoke tests here on the Pod you just deployed...Test all ok..."
